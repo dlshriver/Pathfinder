@@ -22,3 +22,5 @@ jpf-symbc/build/**
 tags
 
 jpf-core/.version
+
+*private*
