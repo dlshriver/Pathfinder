@@ -17,6 +17,8 @@ jpf-core/.hg/
 #vim files
 *.swp
 
-jpf-core/build/*
-jpf-symbc/build/*
+jpf-core/build/**
+jpf-symbc/build/**
 tags
+
+jpf-core/.version
