@@ -42,10 +42,10 @@ import java.util.Map;
 import gov.nasa.jpf.Config;
 
 public class MinMax {
-//	public static int MININT = -1000000;// Integer.MIN_VALUE;//-10000;
-//	public static int MAXINT = 1000000;// Integer.MAX_VALUE;//10000;
-//	public static double MINDOUBLE = -10000.0;// -1.0e8;//Double.MIN_VALUE;
-//	public static double MAXDOUBLE = 10000.0;// 1.0e8; //Double.MAX_VALUE;
+	//	public static int MININT = -1000000;// Integer.MIN_VALUE;//-10000;
+	//	public static int MAXINT = 1000000;// Integer.MAX_VALUE;//10000;
+	//	public static double MINDOUBLE = -10000.0;// -1.0e8;//Double.MIN_VALUE;
+	//	public static double MAXDOUBLE = 10000.0;// 1.0e8; //Double.MAX_VALUE;
 
 	public static int Debug_no_path_constraints = 0;
 	public static int Debug_no_path_constraints_sat = 0;
@@ -57,7 +57,7 @@ public class MinMax {
 	public static void reset() {
 		UniqueId = 0;
 	}
-	
+
 	/**
 	 * Lower bound on symbolic integer variables.
 	 */
@@ -78,7 +78,6 @@ public class MinMax {
 	 */
 	private static byte maxByte = Byte.MAX_VALUE;
 
-	
 	/**
 	 * Lower bound on symbolic short variables.
 	 */
@@ -98,7 +97,7 @@ public class MinMax {
 	 * Upper bound on symbolic long variables.
 	 */
 	private static long maxLong = Long.MAX_VALUE;
-	
+
 	/**
 	 * Lower bound on symbolic integer variables.
 	 */
@@ -108,16 +107,16 @@ public class MinMax {
 	 * Upper bound on symbolic integer variables.
 	 */
 	private static int maxChar = Character.MAX_VALUE;
-	
+
 	/**
 	 * Lower bound on symbolic real variables.
 	 */
-	private static double minDouble = Double.MIN_VALUE; //-8;
+	private static double minDouble = -Double.MAX_VALUE;
 
 	/**
 	 * Upper bound on symbolic real variables.
 	 */
-	private static double maxDouble = Double.MAX_VALUE; //7;
+	private static double maxDouble = Double.MAX_VALUE;
 
 	/**
 	 * Mapping from variable names to minimum integer values.
@@ -175,7 +174,7 @@ public class MinMax {
 			maxInt = x;
 		}
 		assert minInt < maxInt : "Illegal integer range";
-		
+
 		long y = config.getLong("symbolic.min_long", Long.MAX_VALUE);
 		if (y != Long.MAX_VALUE) {
 			minLong = y;
@@ -186,7 +185,7 @@ public class MinMax {
 			maxLong = y;
 		}
 		assert minLong < maxLong : "Illegal long range";
-		
+
 		short s = (short) config.getInt("symbolic.min_short", Short.MAX_VALUE);
 		if (s != Short.MAX_VALUE) {
 			minShort = s;
@@ -197,7 +196,7 @@ public class MinMax {
 			maxShort = s;
 		}
 		assert minShort < maxShort : "Illegal short range";
-		
+
 		byte b = (byte) config.getInt("symbolic.min_byte", Byte.MAX_VALUE);
 		if (b != Byte.MAX_VALUE) {
 			minByte = b;
@@ -208,7 +207,7 @@ public class MinMax {
 			maxByte = b;
 		}
 		assert minByte < maxByte : "Illegal byte range";
-		
+
 		char c = (char) config.getInt("symbolic.min_char", Character.MAX_VALUE);
 		if (c != Character.MAX_VALUE) {
 			minChar = c;
@@ -308,8 +307,7 @@ public class MinMax {
 		System.out.println("symbolic.min_byte=" + minByte);
 		System.out.println("symbolic.min_char=" + minChar);
 		for (String k : varMinIntMap.keySet()) {
-			System.out.println("symbolic.min_int_" + k + "="
-					+ varMinIntMap.get(k));
+			System.out.println("symbolic.min_int_" + k + "=" + varMinIntMap.get(k));
 		}
 		System.out.println("symbolic.max_int=" + maxInt);
 		System.out.println("symbolic.max_long=" + maxLong);
@@ -317,18 +315,15 @@ public class MinMax {
 		System.out.println("symbolic.max_byte=" + maxByte);
 		System.out.println("symbolic.max_char=" + maxChar);
 		for (String k : varMaxIntMap.keySet()) {
-			System.out.println("symbolic.max_int_" + k + "="
-					+ varMaxIntMap.get(k));
+			System.out.println("symbolic.max_int_" + k + "=" + varMaxIntMap.get(k));
 		}
 		System.out.println("symbolic.min_double=" + minDouble);
 		for (String k : varMinDoubleMap.keySet()) {
-			System.out.println("symbolic.min_double_" + k + "="
-					+ varMinDoubleMap.get(k));
+			System.out.println("symbolic.min_double_" + k + "=" + varMinDoubleMap.get(k));
 		}
 		System.out.println("symbolic.max_double=" + maxDouble);
 		for (String k : varMaxDoubleMap.keySet()) {
-			System.out.println("symbolic.max_double_" + k + "="
-					+ varMaxDoubleMap.get(k));
+			System.out.println("symbolic.max_double_" + k + "=" + varMaxDoubleMap.get(k));
 		}
 	}
 
@@ -336,9 +331,9 @@ public class MinMax {
 		if (varname.endsWith("_SYMINT")) {
 			varname = varname.replaceAll("_[0-9][0-9]*_SYMINT", "");
 		}
-		return varMinIntMap!=null && varMinIntMap.containsKey(varname) ? varMinIntMap.get(varname) : min;
+		return varMinIntMap != null && varMinIntMap.containsKey(varname) ? varMinIntMap.get(varname) : min;
 	}
-	
+
 	/**
 	 * Return the minimum integer value that a given variable can assume.
 	 * 
@@ -346,9 +341,9 @@ public class MinMax {
 	 * @return the minimum value of the variable
 	 */
 	public static long getVarMinInt(String varname) {
-		return getVarMin(varname,minInt);
+		return getVarMin(varname, minInt);
 	}
-	
+
 	/**
 	 * Return the minimum long value that a given variable can assume.
 	 * 
@@ -356,9 +351,9 @@ public class MinMax {
 	 * @return the minimum value of the variable
 	 */
 	public static long getVarMinLong(String varname) {
-		return getVarMin(varname,minLong);
+		return getVarMin(varname, minLong);
 	}
-	
+
 	/**
 	 * Return the minimum short value that a given variable can assume.
 	 * 
@@ -366,9 +361,9 @@ public class MinMax {
 	 * @return the minimum value of the variable
 	 */
 	public static long getVarMinShort(String varname) {
-		return getVarMin(varname,minShort);
+		return getVarMin(varname, minShort);
 	}
-	
+
 	/**
 	 * Return the minimum byte value that a given variable can assume.
 	 * 
@@ -376,7 +371,7 @@ public class MinMax {
 	 * @return the minimum value of the variable
 	 */
 	public static long getVarMinByte(String varname) {
-		return getVarMin(varname,minByte);
+		return getVarMin(varname, minByte);
 	}
 
 	/**
@@ -386,16 +381,16 @@ public class MinMax {
 	 * @return the minimum value of the variable
 	 */
 	public static long getVarMinChar(String varname) {
-		return getVarMin(varname,minChar);
+		return getVarMin(varname, minChar);
 	}
-	
+
 	private static long getVarMax(String varname, long max) {
 		if (varname.endsWith("_SYMINT")) {
 			varname = varname.replaceAll("_[0-9][0-9]*_SYMINT", "");
 		}
-		return varMaxIntMap!=null && varMaxIntMap.containsKey(varname) ? varMaxIntMap.get(varname) : max;
+		return varMaxIntMap != null && varMaxIntMap.containsKey(varname) ? varMaxIntMap.get(varname) : max;
 	}
-	
+
 	/**
 	 * Return the maximum integer value that a given variable can assume.
 	 * 
@@ -403,9 +398,9 @@ public class MinMax {
 	 * @return the maximum value of the variable
 	 */
 	public static long getVarMaxInt(String varname) {
-		return getVarMax(varname,maxInt);
+		return getVarMax(varname, maxInt);
 	}
-	
+
 	/**
 	 * Return the maximum long value that a given variable can assume.
 	 * 
@@ -413,9 +408,9 @@ public class MinMax {
 	 * @return the maximum value of the variable
 	 */
 	public static long getVarMaxLong(String varname) {
-		return getVarMax(varname,maxLong);
+		return getVarMax(varname, maxLong);
 	}
-	
+
 	/**
 	 * Return the maximum short value that a given variable can assume.
 	 * 
@@ -423,9 +418,9 @@ public class MinMax {
 	 * @return the maximum value of the variable
 	 */
 	public static long getVarMaxShort(String varname) {
-		return getVarMax(varname,maxShort);
+		return getVarMax(varname, maxShort);
 	}
-	
+
 	/**
 	 * Return the maximum byte value that a given variable can assume.
 	 * 
@@ -433,9 +428,9 @@ public class MinMax {
 	 * @return the maximum value of the variable
 	 */
 	public static long getVarMaxByte(String varname) {
-		return getVarMax(varname,maxByte);
+		return getVarMax(varname, maxByte);
 	}
-	
+
 	/**
 	 * Return the maximum char value that a given variable can assume.
 	 * 
@@ -443,9 +438,9 @@ public class MinMax {
 	 * @return the maximum value of the variable
 	 */
 	public static long getVarMaxChar(String varname) {
-		return getVarMax(varname,maxChar);
+		return getVarMax(varname, maxChar);
 	}
-	
+
 	/**
 	 * Return the minimum real value that a given variable can assume.
 	 * 
@@ -458,7 +453,7 @@ public class MinMax {
 		}
 		return varMinDoubleMap.containsKey(varname) ? varMinDoubleMap.get(varname) : minDouble;
 	}
-	
+
 	/**
 	 * Return the maximum real value that a given variable can assume.
 	 * 
