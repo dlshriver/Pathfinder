@@ -100,7 +100,7 @@ public class DASTORE extends gov.nasa.jpf.jvm.bytecode.DASTORE {
           assert pc != null;
 
           if (peekIndexAttr(ti)==null || !(peekIndexAttr(ti) instanceof IntegerExpression)) {
-              int index = ti.getTopFrame().peek(1);
+              int index = peekIndex(ti);
               indexAttr =  new IntegerConstant(index); 
 		  } else {
               indexAttr = (IntegerExpression)peekIndexAttr(ti);
